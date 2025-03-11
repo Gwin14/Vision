@@ -1,0 +1,15 @@
+<!-- app/templates/app/listar_arquivos.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arquivos do OneDrive</title>
+</head>
+<body>
+    <h1>Arquivos do OneDrive</h1>
+    <ul>
+        {% for arquivo in arquivos %}
+            <li>{{ arquivo.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

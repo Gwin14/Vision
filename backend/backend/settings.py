@@ -11,6 +11,15 @@ NOTION_CLIENT_ID = env.str("NOTION_CLIENT_ID")
 NOTION_CLIENT_SECRET = env.str("NOTION_CLIENT_SECRET")
 NOTION_REDIRECT_URI = env.str("NOTION_REDIRECT_URI")
 
+# settings.py
+MICROSOFT_AUTH = {
+    'CLIENT_ID': env.str("MICROSOFT_CLIENT_ID"),
+    'CLIENT_SECRET': env.str("MICROSOFT_CLIENT_SECRET"),
+    'REDIRECT_URI': env.str("MICROSOFT_REDIRECT_URI"),
+    'SCOPES': ['User.Read', 'Files.Read'],
+    'AUTHORITY': 'https://login.microsoftonline.com/common'
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-1o6+8o(0dvlns&#hh&ctv@j@%1p@=9+v&17u^!!(@+pwfppf0*"
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -38,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "notionoauth",
+    "microsoftauth",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +87,7 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": env.str("DATABASE_NAME"),
     }
 }
 
