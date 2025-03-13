@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "notionoauth",
     "microsoftauth",
+    'rest_framework',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',  # Opcional, para incluir o Swagger UI
 ]
 
 MIDDLEWARE = [
@@ -61,6 +64,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "backend.urls"
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Meu Projeto Django',
+    'DESCRIPTION': 'API do meu projeto Django com documentação Swagger.',
+    'VERSION': '1.0.0',
+   # 'SERVE_INCLUDE_SCHEMA': False,  # Evita expor o schema diretamente
+}
+
 
 TEMPLATES = [
     {
