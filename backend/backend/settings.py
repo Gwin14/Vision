@@ -5,7 +5,6 @@ import environ
 env = environ.Env()
 environ.Env.read_env()  # Lê o arquivo .env
 
-
 # Configurações do Notion
 NOTION_CLIENT_ID = env.str("NOTION_CLIENT_ID")
 NOTION_CLIENT_SECRET = env.str("NOTION_CLIENT_SECRET")
@@ -20,10 +19,8 @@ MICROSOFT_AUTH = {
     'AUTHORITY': 'https://login.microsoftonline.com/common'
 }
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,8 +31,9 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+ALLOWED_HOSTS = ["*"]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -51,17 +49,22 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'drf_spectacular_sidecar',  # Opcional, para incluir o Swagger UI
+    'corsheaders',  # Add this line
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for development
 
 ROOT_URLCONF = "backend.urls"
 
@@ -75,7 +78,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
    # 'SERVE_INCLUDE_SCHEMA': False,  # Evita expor o schema diretamente
 }
-
 
 TEMPLATES = [
     {
@@ -95,7 +97,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -105,7 +106,6 @@ DATABASES = {
         "NAME": env.str("DATABASE_NAME"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -125,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -136,7 +135,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

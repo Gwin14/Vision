@@ -1,10 +1,38 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-refresh/only-export-components */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDnD } from "./DnDContext";
 
-export default () => {
+export default function Sidebar() {
+  const [files, setFiles] = useState([]);
   const [_, setType] = useDnD();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/microsoftauth/arquivos/", {
+          method: "GET",
+          headers: {
+            Accept: "*/*",
+          },
+          credentials: "include", // garante o envio de cookies para a sessão
+        });
+
+        // Se não autenticado, redireciona para o fluxo de login
+        if (response.status === 401) {
+          window.location.href = "http://localhost:8000/microsoftauth/login/";
+          return;
+        }
+
+        const data = await response.json();
+        if (data && data.arquivos) {
+          setFiles(data.arquivos);
+        }
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const onDragStart = (event, nodeType) => {
     setType(nodeType);
@@ -14,7 +42,7 @@ export default () => {
   return (
     <aside>
       <div className="description">
-        You can drag these nodes to the pane on the right.
+        Arraste esses nós para o painel à direita.
       </div>
       <div
         className="dndnode input"
@@ -37,6 +65,14 @@ export default () => {
       >
         Output Node
       </div>
+      <div className="files">
+        <h3>Arquivos do OneDrive</h3>
+        <ul>
+          {files.map((file) => (
+            <li key={file.id}>{file.name}</li>
+          ))}
+        </ul>
+      </div>
     </aside>
   );
-};
+}

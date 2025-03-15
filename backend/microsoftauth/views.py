@@ -1,6 +1,6 @@
 # app/views.py
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import msal
 import requests
 from django.conf import settings
@@ -39,16 +39,23 @@ def auth_callback(request):
 def listar_arquivos(request):
     access_token = request.session.get('access_token')
     if not access_token:
-        return redirect('microsoft_login')
+        # Retorna 401 para indicar que o usuário não está autenticado
+        response = JsonResponse({'error': 'Não autenticado'}, status=401)
+        response['Access-Control-Allow-Origin'] = '*'
+        return response
 
     headers = {
         'Authorization': f'Bearer {access_token}'
     }
     url = 'https://graph.microsoft.com/v1.0/me/drive/root/children'
-    response = requests.get(url, headers=headers)
+    resp = requests.get(url, headers=headers)
 
-    if response.status_code == 200:
-        arquivos = response.json().get('value', [])
-        return render(request, 'listar_arquivos.html', {'arquivos': arquivos})
+    if resp.status_code == 200:
+        arquivos = resp.json().get('value', [])
+        response = JsonResponse({'arquivos': arquivos})
     else:
-        return HttpResponse("Erro ao acessar o OneDrive.", status=response.status_code)
+        response = HttpResponse("Erro ao acessar o OneDrive.", status=resp.status_code)
+
+    # Habilitar CORS
+    response['Access-Control-Allow-Origin'] = '*'
+    return response
