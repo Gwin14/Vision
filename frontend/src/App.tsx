@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useRef } from "react";
 import {
   ReactFlow,
@@ -23,10 +24,6 @@ import { initialEdges, edgeTypes } from "./edges";
 export default function App() {
   const [nodes, , onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect: OnConnect = useCallback(
-    (connection) => setEdges((edges) => addEdge(connection, edges)),
-    [setEdges]
-  );
 
   let id = 0;
   const getId = () => `dndnode_${id++}`;
@@ -60,11 +57,14 @@ export default function App() {
           x: event.clientX,
           y: event.clientY,
         });
+
         const newNode = {
           id: getId(),
-          type,
+          type: type.nodeType,
           position,
-          data: { label: `${type} node` },
+          data: type.file
+            ? { label: type.file.name, ...type.file }
+            : { label: `${type.nodeType} node` },
         };
 
         setNodes((nds) => nds.concat(newNode));

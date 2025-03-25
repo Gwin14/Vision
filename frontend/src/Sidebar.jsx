@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useDnD } from "./DnDContext";
 
@@ -8,13 +9,16 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/microsoftauth/arquivos/", {
-          method: "GET",
-          headers: {
-            Accept: "*/*",
-          },
-          credentials: "include", // garante o envio de cookies para a sessão
-        });
+        const response = await fetch(
+          "http://localhost:8000/microsoftauth/arquivos/",
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+            },
+            credentials: "include", // garante o envio de cookies para a sessão
+          }
+        );
 
         // Se não autenticado, redireciona para o fluxo de login
         if (response.status === 401) {
@@ -34,8 +38,8 @@ export default function Sidebar() {
     fetchData();
   }, []);
 
-  const onDragStart = (event, nodeType) => {
-    setType(nodeType);
+  const onDragStart = (event, nodeType, file = null) => {
+    setType({ nodeType, file });
     event.dataTransfer.effectAllowed = "move";
   };
 
@@ -69,7 +73,14 @@ export default function Sidebar() {
         <h3>Arquivos do OneDrive</h3>
         <ul>
           {files.map((file) => (
-            <li key={file.id}>{file.name}</li>
+            <li
+              key={file.id}
+              className="dndnode file"
+              onDragStart={(event) => onDragStart(event, "file", file)}
+              draggable
+            >
+              {file.name}
+            </li>
           ))}
         </ul>
       </div>
