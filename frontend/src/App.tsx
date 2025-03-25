@@ -25,27 +25,31 @@ import { initialEdges, edgeTypes } from "./edges";
 type SelectedNode = Node | null;
 
 function DnDFlow() {
-  const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const { screenToFlowPosition } = useReactFlow();
-  const [type] = useDnD();
-  const [selectedNode, setSelectedNode] = useState<SelectedNode>(null);
+  const reactFlowWrapper = useRef(null); // Reference to the ReactFlow wrapper
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes); // State for nodes
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges); // State for edges
+  const { screenToFlowPosition } = useReactFlow(); // Function to convert screen position to flow position
+  const [type] = useDnD(); // Get the current drag-and-drop type
+  const [selectedNode, setSelectedNode] = useState<SelectedNode>(null); // State for the selected node
 
+  // Function to generate unique IDs for nodes
   const getId = useCallback(() => {
     return `dndnode_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }, []);
 
+  // Function to handle edge connections
   const onConnect: OnConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
+  // Function to handle drag over event
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
+  // Function to handle drop event
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -73,28 +77,24 @@ function DnDFlow() {
     [screenToFlowPosition, type, setNodes, getId]
   );
 
-  const onNodeClick = useCallback(
-    (event: React.MouseEvent, node: Node) => {
-      event.preventDefault();
-      event.stopPropagation();
-      
-      if (node.type === "file") {
-        setSelectedNode(node);
-      } else {
-        setSelectedNode(null);
-      }
-    },
-    []
-  );
+  // Function to handle node click event
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-  const closeSidebar = useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
+    if (node.type === "file") {
+      setSelectedNode(node);
+    } else {
       setSelectedNode(null);
-    },
-    []
-  );
+    }
+  }, []);
+
+  // Function to close the floating sidebar
+  const closeSidebar = useCallback((event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setSelectedNode(null);
+  }, []);
 
   return (
     <div className="dndflow">
@@ -119,15 +119,8 @@ function DnDFlow() {
       </div>
       <Sidebar />
       {selectedNode && (
-        <div 
-          className="floating-sidebar" 
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            type="button"
-            onClick={closeSidebar}
-            className="close-button"
-          >
+        <div className="floating-sidebar" onClick={(e) => e.stopPropagation()}>
+          <button type="button" onClick={closeSidebar} className="close-button">
             Close
           </button>
           <h3>File Metadata</h3>

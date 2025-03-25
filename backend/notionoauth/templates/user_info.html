@@ -2,108 +2,111 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Informações do Usuário - Notion</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        .user-info, .pages-list {
-            margin-top: 20px;
-        }
-        .page-card {
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-        }
-        .page-title {
-            font-size: 18px;
-            margin: 0;
-            color: #2c3e50;
-        }
-        .page-id, .page-url {
-            font-size: 14px;
-            color: #666;
-            margin: 5px 0;
-        }
-        .page-url a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .page-url a:hover {
-            text-decoration: underline;
-        }
-        .error {
-            color: #e74c3c;
-            font-weight: bold;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+      .user-info,
+      .pages-list {
+        margin-top: 20px;
+      }
+      .page-card {
+        background-color: #f8f9fa;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+      }
+      .page-title {
+        font-size: 18px;
+        margin: 0;
+        color: #2c3e50;
+      }
+      .page-id,
+      .page-url {
+        font-size: 14px;
+        color: #666;
+        margin: 5px 0;
+      }
+      .page-url a {
+        color: #3498db;
+        text-decoration: none;
+      }
+      .page-url a:hover {
+        text-decoration: underline;
+      }
+      .error {
+        color: #e74c3c;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Informações do Usuário - Notion</h1>
-        
-        <!-- Seção do Usuário -->
-        <div class="user-info">
-            {% if user_info %}
-                <h2>Dados do Usuário</h2>
-                <p><strong>ID:</strong> {{ user_info.id }}</p>
-                <p><strong>Nome:</strong> {{ user_info.name }}</p>
-                <p><strong>E-mail:</strong> {{ user_info.person.email }}</p>
-                <p><strong>Avatar URL:</strong> <a href="{{ user_info.avatar_url }}" target="_blank">{{ user_info.avatar_url }}</a></p>
-            {% else %}
-                <p class="error">Nenhuma informação do usuário disponível.</p>
-            {% endif %}
-        </div>
+      <h1>Informações do Usuário - Notion</h1>
 
-        <!-- Seção das Páginas Compartilhadas -->
-        <div class="pages-list">
-            <h2>Páginas Compartilhadas</h2>
-            {% if pages %}
-                {% for page in pages %}
-                    <div class="page-card">
-                        <!-- Título da Página -->
-                        <h3 class="page-title">
-                            {% if page.properties.title.title %}
-                                {{ page.properties.title.title.0.plain_text }}
-                            {% else %}
-                                Página sem título
-                            {% endif %}
-                        </h3>
-                        
-                        <!-- ID e URL da Página -->
-                        <p class="page-id"><strong>ID:</strong> {{ page.id }}</p>
-                        <p class="page-url">
-                            <strong>URL:</strong> 
-                            <a href="{{ page.url }}" target="_blank">{{ page.url }}</a>
-                        </p>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="error">Nenhuma página compartilhada encontrada.</p>
-            {% endif %}
+      <!-- Seção do Usuário -->
+      <div class="user-info">
+        {% if user_info %}
+        <h2>Dados do Usuário</h2>
+        <p><strong>ID:</strong> {{ user_info.id }}</p>
+        <p><strong>Nome:</strong> {{ user_info.name }}</p>
+        <p><strong>E-mail:</strong> {{ user_info.person.email }}</p>
+        <p>
+          <strong>Avatar URL:</strong>
+          <a href="{{ user_info.avatar_url }}" target="_blank"
+            >{{ user_info.avatar_url }}</a
+          >
+        </p>
+        {% else %}
+        <p class="error">Nenhuma informação do usuário disponível.</p>
+        {% endif %}
+      </div>
+
+      <!-- Seção das Páginas Compartilhadas -->
+      <div class="pages-list">
+        <h2>Páginas Compartilhadas</h2>
+        {% if pages %} {% for page in pages %}
+        <div class="page-card">
+          <!-- Título da Página -->
+          <h3 class="page-title">
+            {% if page.properties.title.title %} {{
+            page.properties.title.title.0.plain_text }} {% else %} Página sem
+            título {% endif %}
+          </h3>
+
+          <!-- ID e URL da Página -->
+          <p class="page-id"><strong>ID:</strong> {{ page.id }}</p>
+          <p class="page-url">
+            <strong>URL:</strong>
+            <a href="{{ page.url }}" target="_blank">{{ page.url }}</a>
+          </p>
         </div>
+        {% endfor %} {% else %}
+        <p class="error">Nenhuma página compartilhada encontrada.</p>
+        {% endif %}
+      </div>
     </div>
-</body>
+  </body>
 </html>
