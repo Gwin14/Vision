@@ -24,32 +24,44 @@ import { initialEdges, edgeTypes } from "./edges";
 
 type SelectedNode = Node | null;
 
-function DnDFlow() {
-  const reactFlowWrapper = useRef(null); // Reference to the ReactFlow wrapper
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes); // State for nodes
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges); // State for edges
-  const { screenToFlowPosition } = useReactFlow(); // Function to convert screen position to flow position
-  const [type] = useDnD(); // Get the current drag-and-drop type
-  const [selectedNode, setSelectedNode] = useState<SelectedNode>(null); // State for the selected node
+// Função para formatar tamanho de arquivo
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
 
-  // Function to generate unique IDs for nodes
+// Função para formatar data
+const formatDateTime = (dateString: string): string => {
+  if (!dateString) return "Unknown";
+  const date = new Date(dateString);
+  return date.toLocaleString();
+};
+
+function DnDFlow() {
+  const reactFlowWrapper = useRef(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const { screenToFlowPosition } = useReactFlow();
+  const [type] = useDnD();
+  const [selectedNode, setSelectedNode] = useState<SelectedNode>(null);
+
   const getId = useCallback(() => {
     return `dndnode_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }, []);
 
-  // Function to handle edge connections
   const onConnect: OnConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
-  // Function to handle drag over event
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  // Function to handle drop event
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -77,7 +89,6 @@ function DnDFlow() {
     [screenToFlowPosition, type, setNodes, getId]
   );
 
-  // Function to handle node click event
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     event.preventDefault();
     event.stopPropagation();
@@ -89,7 +100,6 @@ function DnDFlow() {
     }
   }, []);
 
-  // Function to close the floating sidebar
   const closeSidebar = useCallback((event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -124,15 +134,85 @@ function DnDFlow() {
             Close
           </button>
           <h3>File Metadata</h3>
-          <p>
-            <strong>Name:</strong> {selectedNode.data.name}
-          </p>
-          <p>
-            <strong>ID:</strong> {selectedNode.data.id}
-          </p>
-          <p>
-            <strong>Size:</strong> {selectedNode.data.size}
-          </p>
+          <div className="metadata-section">
+            <p>
+              <strong>Name:</strong> {selectedNode.data.name}
+            </p>
+            <p>
+              <strong>Type:</strong>{" "}
+              {selectedNode.data.folder
+                ? "Folder"
+                : selectedNode.data.file?.mimeType || "File"}
+            </p>
+            <p>
+              <strong>ID:</strong> {selectedNode.data.id}
+            </p>
+            <p>
+              <strong>Size:</strong> {formatFileSize(selectedNode.data.size)}
+            </p>
+            <p>
+              <strong>Created:</strong>{" "}
+              {formatDateTime(selectedNode.data.createdDateTime)}
+            </p>
+            <p>
+              <strong>Modified:</strong>{" "}
+              {formatDateTime(selectedNode.data.lastModifiedDateTime)}
+            </p>
+            <p>
+              <strong>Created by:</strong>{" "}
+              {selectedNode.data.createdBy?.user?.displayName || "Unknown"}
+            </p>
+            <p>
+              <strong>Modified by:</strong>{" "}
+              {selectedNode.data.lastModifiedBy?.user?.displayName || "Unknown"}
+            </p>
+            {selectedNode.data.file?.mimeType && (
+              <p>
+                <strong>File type:</strong> {selectedNode.data.file.mimeType}
+              </p>
+            )}
+            {selectedNode.data.folder?.childCount !== undefined && (
+              <p>
+                <strong>Items:</strong> {selectedNode.data.folder.childCount}
+              </p>
+            )}
+            {selectedNode.data.parentReference && (
+              <div className="parent-info">
+                <p>
+                  <strong>Location:</strong>{" "}
+                  {selectedNode.data.parentReference.name || "Root"}
+                </p>
+                <p>
+                  <strong>Path:</strong>{" "}
+                  {selectedNode.data.parentReference.path || "/"}
+                </p>
+              </div>
+            )}
+            {selectedNode.data.webUrl && (
+              <p>
+                <strong>Web URL:</strong>{" "}
+                <a
+                  href={selectedNode.data.webUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open in browser
+                </a>
+              </p>
+            )}
+            {selectedNode.data["@microsoft.graph.downloadUrl"] && (
+              <p>
+                <strong>Download:</strong>{" "}
+                <a
+                  href={selectedNode.data["@microsoft.graph.downloadUrl"]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download file
+                </a>
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
