@@ -29,17 +29,18 @@ function FolderItem({ item, onDragStart }) {
   };
 
   return (
-    <li>
+    <li style={{ listStyleType: "none" }}>
       <div
         className="dndnode file"
         onClick={toggleExpand}
         onDragStart={(event) => onDragStart(event, "file", item)}
         draggable
+        style={{ backgroundColor: expanded ? "#808080aa" : "#8080803a" }}
       >
-        {item.name} {item.folder ? (expanded ? "[-]" : "[+]") : ""}
+        {item.folder ? (expanded ? "📂" : "📁") : ""} {item.name}
       </div>
       {expanded && children && (
-        <ul style={{ paddingLeft: "20px" }}>
+        <ul style={{ paddingLeft: "20px", listStyleType: "none" }}>
           {children.map((child) =>
             child.folder ? (
               <FolderItem

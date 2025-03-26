@@ -24,8 +24,21 @@ const FloatingSidebar: React.FC<FloatingSidebarProps> = ({ node, onClose }) => {
   return (
     <div className="floating-sidebar" onClick={(e) => e.stopPropagation()}>
       <button type="button" onClick={onClose} className="close-button">
-        Close
+        »
       </button>
+      {node.data.folder ? (
+        <img
+          src="https://static-00.iconduck.com/assets.00/folder-icon-512x410-jvths5l6.png"
+          alt=""
+          style={{ width: "80%", margin: "auto", display: "block" }}
+        />
+      ) : (
+        <img
+          src="https://cdn.pixabay.com/photo/2014/04/03/00/40/document-309065_640.png"
+          alt=""
+          style={{ width: "80%", margin: "auto", display: "block" }}
+        />
+      )}
       <h3>File Metadata</h3>
       <div className="metadata-section">
         <p>
