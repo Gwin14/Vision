@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDnD } from "./DnDContext";
-import FloatingSidebar from "./FloatingSidebar";
 
 // Componente para itens que podem ser recursivos
 function FolderItem({ item, onDragStart }) {
@@ -107,7 +106,6 @@ export default function Sidebar() {
 
   return (
     <aside>
-      <FloatingSidebar onDragStart={onDragStart} />
       <div className="files">
         <h3>Arquivos do OneDrive</h3>
         <ul>

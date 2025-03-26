@@ -21,6 +21,7 @@ import { DnDProvider, useDnD } from "./DnDContext";
 
 import { initialNodes, nodeTypes } from "./nodes";
 import { initialEdges, edgeTypes } from "./edges";
+import FloatingSidebar from "./FloatingSidebar";
 
 type SelectedNode = Node | null;
 
@@ -129,91 +130,7 @@ function DnDFlow() {
       </div>
       <Sidebar />
       {selectedNode && (
-        <div className="floating-sidebar" onClick={(e) => e.stopPropagation()}>
-          <button type="button" onClick={closeSidebar} className="close-button">
-            Close
-          </button>
-          <h3>File Metadata</h3>
-          <div className="metadata-section">
-            <p>
-              <strong>Name:</strong> {selectedNode.data.name}
-            </p>
-            <p>
-              <strong>Type:</strong>{" "}
-              {selectedNode.data.folder
-                ? "Folder"
-                : selectedNode.data.file?.mimeType || "File"}
-            </p>
-            <p>
-              <strong>ID:</strong> {selectedNode.data.id}
-            </p>
-            <p>
-              <strong>Size:</strong> {formatFileSize(selectedNode.data.size)}
-            </p>
-            <p>
-              <strong>Created:</strong>{" "}
-              {formatDateTime(selectedNode.data.createdDateTime)}
-            </p>
-            <p>
-              <strong>Modified:</strong>{" "}
-              {formatDateTime(selectedNode.data.lastModifiedDateTime)}
-            </p>
-            <p>
-              <strong>Created by:</strong>{" "}
-              {selectedNode.data.createdBy?.user?.displayName || "Unknown"}
-            </p>
-            <p>
-              <strong>Modified by:</strong>{" "}
-              {selectedNode.data.lastModifiedBy?.user?.displayName || "Unknown"}
-            </p>
-            {selectedNode.data.file?.mimeType && (
-              <p>
-                <strong>File type:</strong> {selectedNode.data.file.mimeType}
-              </p>
-            )}
-            {selectedNode.data.folder?.childCount !== undefined && (
-              <p>
-                <strong>Items:</strong> {selectedNode.data.folder.childCount}
-              </p>
-            )}
-            {selectedNode.data.parentReference && (
-              <div className="parent-info">
-                <p>
-                  <strong>Location:</strong>{" "}
-                  {selectedNode.data.parentReference.name || "Root"}
-                </p>
-                <p>
-                  <strong>Path:</strong>{" "}
-                  {selectedNode.data.parentReference.path || "/"}
-                </p>
-              </div>
-            )}
-            {selectedNode.data.webUrl && (
-              <p>
-                <strong>Web URL:</strong>{" "}
-                <a
-                  href={selectedNode.data.webUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open in browser
-                </a>
-              </p>
-            )}
-            {selectedNode.data["@microsoft.graph.downloadUrl"] && (
-              <p>
-                <strong>Download:</strong>{" "}
-                <a
-                  href={selectedNode.data["@microsoft.graph.downloadUrl"]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Download file
-                </a>
-              </p>
-            )}
-          </div>
-        </div>
+        <FloatingSidebar node={selectedNode} onClose={closeSidebar} />
       )}
     </div>
   );
