@@ -39,7 +39,6 @@ def auth_callback(request):
 def listar_arquivos(request):
     access_token = request.session.get('access_token')
     if not access_token:
-        # Retorna 401 para indicar que o usuário não está autenticado
         response = JsonResponse({'error': 'Não autenticado'}, status=401)
         response['Access-Control-Allow-Origin'] = '*'
         return response
@@ -47,15 +46,19 @@ def listar_arquivos(request):
     headers = {
         'Authorization': f'Bearer {access_token}'
     }
-    url = 'https://graph.microsoft.com/v1.0/me/drive/root/children'
+    parent_id = request.GET.get('parentId')
+    if parent_id:
+        url = f'https://graph.microsoft.com/v1.0/me/drive/items/{parent_id}/children'
+    else:
+        url = 'https://graph.microsoft.com/v1.0/me/drive/root/children'
+    
     resp = requests.get(url, headers=headers)
-
+    
     if resp.status_code == 200:
         arquivos = resp.json().get('value', [])
         response = JsonResponse({'arquivos': arquivos})
     else:
         response = HttpResponse("Erro ao acessar o OneDrive.", status=resp.status_code)
-
-    # Habilitar CORS
+    
     response['Access-Control-Allow-Origin'] = '*'
     return response
