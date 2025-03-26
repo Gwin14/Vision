@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDnD } from "./DnDContext";
+import FloatingSidebar from "./FloatingSidebar";
 
 // Componente para itens que podem ser recursivos
 function FolderItem({ item, onDragStart }) {
@@ -10,11 +11,14 @@ function FolderItem({ item, onDragStart }) {
     setExpanded(!expanded);
     if (!children && !expanded) {
       // Se ainda não buscou os filhos, faça a chamada
-      fetch(`http://localhost:8000/microsoftauth/arquivos/?parentId=${item.id}`, {
-        method: "GET",
-        headers: { Accept: "*/*" },
-        credentials: "include",
-      })
+      fetch(
+        `http://localhost:8000/microsoftauth/arquivos/?parentId=${item.id}`,
+        {
+          method: "GET",
+          headers: { Accept: "*/*" },
+          credentials: "include",
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data && data.arquivos) {
@@ -39,7 +43,11 @@ function FolderItem({ item, onDragStart }) {
         <ul style={{ paddingLeft: "20px" }}>
           {children.map((child) =>
             child.folder ? (
-              <FolderItem key={child.id} item={child} onDragStart={onDragStart} />
+              <FolderItem
+                key={child.id}
+                item={child}
+                onDragStart={onDragStart}
+              />
             ) : (
               <li
                 key={child.id}
@@ -64,13 +72,16 @@ export default function Sidebar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/microsoftauth/arquivos/", {
-          method: "GET",
-          headers: {
-            Accept: "*/*",
-          },
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://localhost:8000/microsoftauth/arquivos/",
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+            },
+            credentials: "include",
+          }
+        );
 
         if (response.status === 401) {
           window.location.href = "http://localhost:8000/microsoftauth/login/";
@@ -96,30 +107,7 @@ export default function Sidebar() {
 
   return (
     <aside>
-      <div className="description">
-        Arraste esses nós para o painel à direita.
-      </div>
-      <div
-        className="dndnode input"
-        onDragStart={(event) => onDragStart(event, "input")}
-        draggable
-      >
-        Input Node
-      </div>
-      <div
-        className="dndnode"
-        onDragStart={(event) => onDragStart(event, "default")}
-        draggable
-      >
-        Default Node
-      </div>
-      <div
-        className="dndnode output"
-        onDragStart={(event) => onDragStart(event, "output")}
-        draggable
-      >
-        Output Node
-      </div>
+      <FloatingSidebar onDragStart={onDragStart} />
       <div className="files">
         <h3>Arquivos do OneDrive</h3>
         <ul>
