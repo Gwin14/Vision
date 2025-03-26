@@ -84,7 +84,8 @@ export default function Sidebar() {
         );
 
         if (response.status === 401) {
-          window.location.href = "http://localhost:8000/microsoftauth/login/";
+          window.location.href =
+            "http://localhost:8000/microsoftauth/auth/microsoft/";
           return;
         }
 

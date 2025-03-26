@@ -47,6 +47,8 @@ body {
 }
 
 .dndflow .dndnode {
+  overflow-x: hidden;
+  margin-left: -20px;
   height: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -105,6 +107,7 @@ body {
   z-index: 10;
   overflow-x: hidden;
   border-radius: 0px 10px 10px 0px;
+  animation: floatingSidebar 0.5s ease-in-out;
 }
 
 .floating-sidebar button {
@@ -118,4 +121,13 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+@keyframes floatingSidebar {
+  from {
+    left: -300px;
+  }
+  to {
+    left: 0;
+  }
 }
