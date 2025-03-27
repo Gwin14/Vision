@@ -81,7 +81,11 @@ function DnDFlow() {
         type: type.nodeType,
         position,
         data: type.file
-          ? { label: type.file.name, ...type.file }
+          ? {
+              label: type.file.name,
+              size: type.file.size,
+              modified: type.file.modifiedDateTime,
+            }
           : { label: `${type.nodeType} node` },
       };
 
