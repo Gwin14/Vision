@@ -33,7 +33,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True  # Permite credenciais (cookies, autenticação)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Adicione a origem do frontend
+]
+
+# Ou, se precisar permitir múltiplas portas locais para testes:
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http://localhost:\d+$",
+]
 
 # Application definition
 
