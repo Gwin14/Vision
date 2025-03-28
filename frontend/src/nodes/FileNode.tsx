@@ -16,7 +16,7 @@ export function FileNode({ data }: NodeProps<FileNode>) {
       {/* <div>Size: {data.size} bytes</div>
       <div>Modified: {data.modified}</div> */}
       <Handle type="source" position={Position.Bottom} />
-      <Handle type="source" position={Position.Top} />
+      <Handle type="target" position={Position.Top} />
     </div>
   );
 }
