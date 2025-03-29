@@ -142,13 +142,22 @@ body {
 .react-flow__node-file > .react-flow__node-default {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.react-flow__handle {
+.react-flow__handle,
+.react-flow__resize-control {
   opacity: 0;
   transition: all 0.2s ease;
 }
 
 .react-flow__node :hover .react-flow__handle {
+  opacity: 1;
+}
+
+.react-flow__node :hover .react-flow__resize-control {
   opacity: 1;
 }
