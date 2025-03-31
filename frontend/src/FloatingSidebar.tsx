@@ -42,14 +42,14 @@ const FloatingSidebar: React.FC<FloatingSidebarProps> = ({ node, onClose }) => {
       <h3>File Metadata</h3>
       <div className="metadata-section">
         <p>
-          <strong>Name:</strong> {node.data.name}
+          <strong>Name:</strong> {node.data.name || "Unknown"}
         </p>
         <p>
           <strong>Type:</strong>{" "}
           {node.data.folder ? "Folder" : node.data.file?.mimeType || "File"}
         </p>
         <p>
-          <strong>ID:</strong> {node.data.id}
+          <strong>ID:</strong> {node.data.id || "Unknown"}
         </p>
         <p>
           <strong>Size:</strong> {formatFileSize(node.data.size)}

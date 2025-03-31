@@ -82,9 +82,19 @@ function DnDFlow() {
         position,
         data: type.file
           ? {
+              name: type.file.name,
               label: type.file.name,
               size: type.file.size,
-              modified: type.file.modifiedDateTime,
+              createdDateTime: type.file.createdDateTime,
+              lastModifiedDateTime: type.file.modifiedDateTime,
+              createdBy: type.file.createdBy,
+              lastModifiedBy: type.file.lastModifiedBy,
+              file: type.file.file,
+              folder: type.file.folder,
+              parentReference: type.file.parentReference,
+              webUrl: type.file.webUrl,
+              "@microsoft.graph.downloadUrl":
+                type.file["@microsoft.graph.downloadUrl"],
             }
           : { label: `${type.nodeType} node` },
       };
