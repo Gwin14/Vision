@@ -13,14 +13,20 @@ const controlStyle = {
 };
 
 export function FileNode({ data }: NodeProps<FileNode>) {
+  const isPng = data.label.toLowerCase().endsWith(".png");
+
   return (
     <div className="react-flow__node-default">
       <NodeResizeControl style={controlStyle} minWidth={100} minHeight={50}>
         <ResizeIcon />
       </NodeResizeControl>
       <img
-        style={{ width: 50 }}
-        src="https://m.media-amazon.com/images/I/51fBoQXGnIL.png"
+        style={{ width: 50, borderRadius: "5px", marginRight: 10 }}
+        src={
+          isPng && data.downloadUrl // Use downloadUrl for PNG files
+            ? data.downloadUrl
+            : "https://m.media-amazon.com/images/I/51fBoQXGnIL.png"
+        }
         alt=""
       />
       <div>

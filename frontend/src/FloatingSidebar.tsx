@@ -26,7 +26,18 @@ const FloatingSidebar: React.FC<FloatingSidebarProps> = ({ node, onClose }) => {
       <button type="button" onClick={onClose} className="close-button">
         »
       </button>
-      {node.data.folder ? (
+      {node.data.file?.mimeType === "image/png" ? (
+        <img
+          src={node.data["@microsoft.graph.downloadUrl"]}
+          alt={node.data.name || "Image"}
+          style={{
+            width: "90%",
+            margin: "auto",
+            display: "block",
+            borderRadius: "5px",
+          }}
+        />
+      ) : node.data.folder ? (
         <img
           src="https://static-00.iconduck.com/assets.00/folder-icon-512x410-jvths5l6.png"
           alt=""

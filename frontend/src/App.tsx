@@ -95,6 +95,7 @@ function DnDFlow() {
               webUrl: type.file.webUrl,
               "@microsoft.graph.downloadUrl":
                 type.file["@microsoft.graph.downloadUrl"],
+              downloadUrl: type.file["@microsoft.graph.downloadUrl"], // Added this property
             }
           : { label: `${type.nodeType} node` },
       };
