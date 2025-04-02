@@ -14,6 +14,7 @@ const controlStyle = {
 
 export function FileNode({ data }: NodeProps<FileNode>) {
   const isPng = data.label.toLowerCase().endsWith(".png");
+  const isJpg = data.label.toLowerCase().endsWith(".jpg");
 
   return (
     <div className="react-flow__node-default">
@@ -23,7 +24,7 @@ export function FileNode({ data }: NodeProps<FileNode>) {
       <img
         style={{ width: 50, borderRadius: "5px", marginRight: 10 }}
         src={
-          isPng && data.downloadUrl // Use downloadUrl for PNG files
+          (isPng || isJpg) && data.downloadUrl // Use downloadUrl for PNG files
             ? data.downloadUrl
             : "https://m.media-amazon.com/images/I/51fBoQXGnIL.png"
         }

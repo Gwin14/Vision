@@ -26,7 +26,8 @@ const FloatingSidebar: React.FC<FloatingSidebarProps> = ({ node, onClose }) => {
       <button type="button" onClick={onClose} className="close-button">
         »
       </button>
-      {node.data.file?.mimeType === "image/png" ? (
+      {node.data.file?.mimeType === "image/png" ||
+      node.data.file?.mimeType === "image/jpeg" ? (
         <img
           src={node.data["@microsoft.graph.downloadUrl"]}
           alt={node.data.name || "Image"}
